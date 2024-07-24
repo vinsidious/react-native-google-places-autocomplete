@@ -525,8 +525,7 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
         if (request.status === 200) {
           const responseJSON = JSON.parse(request.responseText);
           if (typeof responseJSON.predictions !== 'undefined') {
-            // if (_isMounted === true) {
-            const results =
+            let results =
               props.nearbyPlacesAPI === 'GoogleReverseGeocoding'
                 ? _filterResultsByTypes(
                     responseJSON.predictions,
@@ -534,9 +533,13 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
                   )
                 : responseJSON.predictions;
 
+            // Apply preprocessResults if provided
+            if (props.preprocessResults) {
+              results = props.preprocessResults(results);
+            }
+
             _results = results;
             setDataSource(buildRowsFromResults(results, text));
-            // }
           }
           if (typeof responseJSON.error_message !== 'undefined') {
             if (!props.onFail)
@@ -942,6 +945,7 @@ GooglePlacesAutocomplete.propTypes = {
   textInputHide: PropTypes.bool,
   textInputProps: PropTypes.object,
   timeout: PropTypes.number,
+  preprocessResults: PropTypes.func,
 };
 
 GooglePlacesAutocomplete.defaultProps = {
@@ -986,6 +990,7 @@ GooglePlacesAutocomplete.defaultProps = {
   textInputHide: false,
   textInputProps: {},
   timeout: 20000,
+  preprocessResults: null,
 };
 
 GooglePlacesAutocomplete.displayName = 'GooglePlacesAutocomplete';
