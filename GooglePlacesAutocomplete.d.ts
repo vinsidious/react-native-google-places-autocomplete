@@ -431,6 +431,11 @@ interface GooglePlacesAutocompleteProps {
   /** text input props */
   textInputProps?: TextInputProps | Object;
   timeout?: number;
+  /** Function to preprocess results before they are displayed */
+  preprocessResults?: (
+    inputText: string,
+    results: GooglePlaceData[]
+  ) => GooglePlaceData[];
 }
 
 export type GooglePlacesAutocompleteRef = {
