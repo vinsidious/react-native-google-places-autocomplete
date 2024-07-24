@@ -533,9 +533,9 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
                   )
                 : responseJSON.predictions;
 
-            // Apply preprocessResults if provided
+            // Apply preprocessResults if provided, passing the current input text
             if (props.preprocessResults) {
-              results = props.preprocessResults(results);
+              results = props.preprocessResults(text, results);
             }
 
             _results = results;
